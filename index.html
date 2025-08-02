@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Madamji</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: #0A1128; /* Deep space blue background */
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+    }
+
+    #lightsOn {
+      background-color: #0D2149; /* Lighter space blue when lights are on */
+      background-image: url('starfield.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: background-color 2s;
+    }
+
+    .btn {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #16DB93; /* Bright teal button */
+      color: #0A1128; /* Dark text on button */
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      z-index: 20;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease;
+      box-shadow: 0 0 15px rgba(22, 219, 147, 0.6); /* Glow effect */
+    }
+
+    .btn.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .light {
+      width: 30px;
+      position: absolute;
+      top: 0;
+      filter: hue-rotate(200deg); /* Gives lights a blue tint */
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .balloon {
+      position: absolute;
+      width: 60px;
+      animation: floatUp 10s linear infinite;
+      z-index: 5;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0vh) scale(0.5);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-120vh) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    .heart {
+      position: absolute;
+      width: 30px;
+      animation: floatHeart 5s linear infinite;
+    }
+
+    @keyframes floatHeart {
+      0% { transform: translateY(100vh); opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+
+    #cake {
+      position: absolute;
+      bottom: 200px;
+      left: -300px;
+      width: 200px;
+      transition: left 2s ease-in-out;
+      z-index: 10;
+      filter: drop-shadow(0 0 10px rgba(22, 219, 147, 0.7)); /* Cake glow effect */
+    }
+
+    #cake.show {
+      left: calc(50% - 100px);
+    }
+
+    #popupMsg {
+      position: absolute;
+      bottom: 170px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      max-width: 400px;
+      max-height: 300px;
+      background: rgba(23, 37, 84, 0.7); /* Navy blue semi-transparent */
+      color: #fff;
+      padding: 15px 20px;
+      font-size: 16px;
+      line-height: 1.5;
+      border-radius: 15px;
+      overflow-y: auto;
+      display: none;
+      z-index: 15;
+      backdrop-filter: blur(8px);
+      box-sizing: border-box;
+      border: 2px solid #16DB93; /* Teal border */
+      box-shadow: 0 0 20px rgba(22, 219, 147, 0.4); /* Subtle glow */
+    }
+
+    #popupMsg.show {
+      display: block;
+      animation: typewriter 2s steps(40) 1 normal both;
+    }
+
+    #popupMsg .moon-signature {
+      width: 120px;
+      margin-top: 10px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.7));
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    @keyframes typewriter {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    #madamji {
+      position: absolute;
+      top: 60px;
+      width: 100%;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      z-index: 10;
+      opacity: 0;
+    }
+
+    #madamji.show {
+      display: flex;
+      animation: fadeIn 2s forwards;
+    }
+
+    #madamji h1 {
+      color: #FFD700; /* Gold title */
+      font-size: 36px;
+      margin-top: 30px;
+      z-index: 11;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* Gold glow */
+    }
+
+    #madamji .letters {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    #madamji .letters img {
+      width: 60px;
+      animation: tilt 2s infinite alternate;
+      filter: drop-shadow(0 0 5px rgba(22, 219, 147, 0.8)); /* Teal glow */
+    }
+
+    @keyframes tilt {
+      from { transform: rotate(-5deg) translateY(0); }
+      to { transform: rotate(5deg) translateY(-10px); }
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .carousel-container {
+      position: absolute;
+      bottom: 500px;
+      width: 100%;
+      height: 120px;
+      overflow: hidden;
+      z-index: 9;
+      display: none;
+    }
+
+    .carousel-container.show {
+      display: block;
+    }
+
+    .carousel-track {
+      display: flex;
+      animation: scroll-left 12.5s linear infinite;
+    }
+
+    .carousel-track img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      margin-right: 10px;
+      border-radius: 10px;
+      flex-shrink: 0;
+      border: 2px solid #16DB93; /* Teal border */
+      box-shadow: 0 0 10px rgba(22, 219, 147, 0.5); /* Glow effect */
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Stars background effect */
+    .star {
+      position: absolute;
+      background-color: white;
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    /* Mobile Responsive Styles */
+    @media screen and (max-width: 768px) {
+      .btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        bottom: 40px;
+      }
+
+      #cake {
+        width: 150px;
+        bottom: 180px;
+      }
+      
+      #cake.show {
+        left: calc(50% - 75px);
+      }
+      
+      #popupMsg {
+        bottom: 120px;
+        max-height: 230px;
+        font-size: 14px;
+        width: 60%;
+        padding: 10px 15px;
+      }
+      
+      #popupMsg .moon-signature {
+        width: 50px;
+      }
+      
+      #madamji {
+        top: 80px;
+      }
+      
+      #madamji h1 {
+        font-size: 24px;
+        margin-top: 20px;
+      }
+      
+      #madamji .letters img {
+        width: 40px;
+      }
+      
+      .carousel-container {
+        bottom: 400px;
+        height: 100px;
+      }
+      
+      .carousel-track img {
+        width: 100px;
+        height: 100px;
+      }
+      
+      .balloon {
+        width: 50px;
+      }
+      
+      .heart {
+        width: 20px;
+      }
+    }
+
+    /* Small Mobile Devices */
+    @media screen and (max-width: 480px) {
+      .btn {
+        padding: 8px 16px;
+        font-size: 14px;
+        bottom: 30px;
+      }
+
+      #cake {
+        width: 120px;
+        bottom: 160px;
+      }
+      
+      #cake.show {
+        left: calc(50% - 60px);
+      }
+      
+      #popupMsg {
+        bottom: 90px;
+        max-height: 180px;
+        font-size: 12px;
+        width: 65%;
+        max-width: 280px;
+        padding: 10px 12px;
+      }
+      
+      #popupMsg .moon-signature {
+        width: 40px;
+      }
+      
+      #madamji {
+        top: 100px;
+      }
+      
+      #madamji h1 {
+        font-size: 20px;
+        margin-top: 15px;
+      }
+      
+      #madamji .letters img {
+        width: 30px;
+        gap: 5px;
+      }
+      
+      .carousel-container {
+        bottom: 350px;
+        height: 80px;
+      }
+      
+      .carousel-track img {
+        width: 80px;
+        height: 80px;
+      }
+      
+      .balloon {
+        width: 40px;
+      }
+      
+      .light {
+        width: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="btn show" id="btn1">Turn on lights</button>
+  <button class="btn" id="btn3">Balloons for you</button>
+  <button class="btn" id="btn4">Cake for cutie</button>
+  <button class="btn" id="btn5">Light the candles</button>
+
+  <img src="cake.png" id="cake" alt="Birthday cake">
+
+  <div class="carousel-container" id="carouselContainer">
+    <div class="carousel-track" id="carousel">
+      <!-- Images will be inserted here -->
+    </div>
+  </div>
+
+<div id="popupMsg">
+  <p style="color: #ffffff; text-align: left;">
+    🎉💖 <strong style="color: #16DB93;">Happy Birthday Yukti, chudel dayan chipkali!</strong> 💖🎉<br><br>
+
+    Arre oye <strong style="color: #FFD700;">Madamji</strong> 😏,<br>
+    3.5 saal se jhel raha hoon tujhe 😤 — aur tu ab tak best friend hai… kya hi <span style="color: #FF69B4;">patience level</span> hai mera! 💪<br>
+    Tere bina life thodi bland lagti hai 😒 (haan haan, zyada uda mat… <span style="color: #87CEEB;">height</span> se gir jaayegi 🤭).<br><br>
+
+    Tere saath har cheez fun hoti hai — gossip ☕, random bakchodi 😂, ya tujhe roast karna 🔥.<br>
+    Aur tu toh hamesha busy hone ka natak karti hai… reality mein ya toh phone pe 📱 hoti hai, ya kisi “special” call pe 😉.<br><br>
+
+    Aaj tera din hai 🌸, full enjoy karna 💃, cake todhna 🍰 (aur mujhe dena warna blocklist ready hai 😤).<br>
+    Party ka plan bana le 🥳 warna main tera “birthday gift” ka <span style="color: #FFA07A;">invoice</span> bhej dunga 😏.<br>
+    Attitude control mein rakhna 🙄, warna main public mein teri embarrassing kahaniyaan leak kar dunga 📢.<br><br>
+
+    Tujhe woh “ahem” wala bhi wish karega 💌, lekin yaad rakh —<br>
+    Main pehle aaya tha, main asli bestie hoon 😎💙.<br>
+    Teri har wish poori ho 🌠 — chahe woh naye shoes 👟 ho, ya koi “special” trip 🏖️.<br><br>
+
+    Bas ek cheez fix rehni chahiye — tu waise hi bindaas 😜, thodi crazy 🤪, full drama queen 👑,<br>
+    aur thodi irritating bhi 😈 (warna maza nahi aayega).<br>
+    Aur haan, <span style="color: #FF1493;">chudel dayan chipkali</span> title lifetime ke liye fix hai… koi exchange offer nahi! 🚫<br><br>
+
+    <strong style="color:#3498db;">Tera asli bestie,<br>Anvesh 💙</strong>
+    <br><br>
+
+    <h2 style="color:#16DB93; font-size:1.25rem;">The moon knew before any of us</h2>
+    <h2 style="color:#16DB93; font-size:1.25rem;">That a star like you was born.</h2>
+    <h2 style="color:#16DB93; font-size:1.25rem;">|</h2>
+    <h2 style="color:#16DB93; font-size:1.25rem;">V</h2>
+    <img src="moon.png" class="moon-signature" alt="Moon"
+      onerror="this.src='data:image/svg+xml;utf8,&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 100 100&quot;&gt;&lt;circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;40&quot; fill=&quot;%23F5F3CE&quot;/&gt;&lt;circle cx=&quot;65&quot; cy=&quot;35&quot; r=&quot;10&quot; fill=&quot;%230A1128&quot;/&gt;&lt;circle cx=&quot;70&quot; cy=&quot;50&quot; r=&quot;8&quot; fill=&quot;%230A1128&quot;/&gt;&lt;circle cx=&quot;60&quot; cy=&quot;65&quot; r=&quot;6&quot; fill=&quot;%230A1128&quot;/&gt;&lt;/svg&gt;'">
+  </p>
+</div>
+
+  <div id="madamji">
+    <h1 style="color: #FFD700;">🎉 Happy Birthday MADAMJI 🎉</h1>
+    <div class="letters">
+      <img src="m.png" alt="M">
+      <img src="a.png" alt="A">
+      <img src="d.png" alt="D">
+      <img src="a.png" alt="A">
+      <img src="m.png" alt="M">
+      <img src="j.png" alt="J">
+      <img src="i.png" alt="I">
+    </div>
+  </div>
+
+  <!-- Audio element for birthday song -->
+  <audio id="birthdaySong" loop>
+    <source src="song.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    window.onload = function() {
+      // Create stars in the background
+      const numStars = 150;
+      for (let i = 0; i < numStars; i++) {
+        const star = document.createElement("div");
+        
+        star.classList.add("star");
+        
+        // Random size between 1-3px
+        const size = Math.random() * 2 + 1;
+        star.style.width = size + "px";
+        star.style.height = size + "px";
+        
+        // Random position
+        star.style.top = Math.random() * 100 + "vh";
+        star.style.left = Math.random() * 100 + "vw";
+        
+        // Random opacity
+        star.style.opacity = Math.random() * 0.8 + 0.2;
+        
+        // Random twinkle animation
+        if (Math.random() > 0.7) {
+          star.style.animation = `blink ${Math.random() * 5 + 2}s infinite`;
+        }
+        
+        document.body.appendChild(star);
+      }
+    
+      // Create floating hearts (now stars/gaming icons instead)
+      const numHearts = window.innerWidth < 480 ? 15 : 30;
+      const iconTypes = ["heart.png", "star.png", "heart.png"];
+      for (let i = 0; i < numHearts; i++) {
+        const heart = document.createElement("img");
+        heart.src = iconTypes[i % iconTypes.length];
+        heart.onerror = () => {
+          // Fallback for missing images - use a star SVG
+          const colors = ["#FFD700", "#16DB93", "#3498db"];
+          const color = colors[i % colors.length];
+          heart.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 51 48"><path fill="${color}" d="M25,1 L31,17 L47,17 L34,29 L39,45 L25,36 L11,45 L16,29 L3,17 L19,17 Z"/></svg>`;
+        };
+        heart.classList.add("heart");
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDelay = Math.random() * 5 + "s";
+        heart.style.width = (window.innerWidth < 480 ? 15 : 20) + Math.random() * 15 + "px";
+        document.body.appendChild(heart);
+      }
+
+      // Load carousel images (1.png to 41.png)
+      const carousel = document.getElementById("carousel");
+      const totalImages = 41;
+      const repeats = 2;
+      
+      for (let r = 0; r < repeats; r++) {
+        for (let i = 1; i <= totalImages; i++) {
+          const img = document.createElement("img");
+          img.src = `${i}.png`;
+          img.onerror = () => {
+            img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><rect width="120" height="120" fill="%23172554"/><text x="60" y="60" font-family="Arial" font-size="16" fill="white" text-anchor="middle" dominant-baseline="middle">Photo ${i}</text></svg>';
+          };
+          const imgSize = window.innerWidth < 480 ? 80 : (window.innerWidth < 768 ? 100 : 120);
+          img.width = imgSize;
+          img.height = imgSize;
+          img.alt = `Photo ${i}`;
+          carousel.appendChild(img);
+        }
+      }
+
+      // Button handlers
+      document.getElementById("btn1").onclick = function() {
+        document.body.id = "lightsOn";
+        const numLights = window.innerWidth < 480 ? 7 : 10;
+        for (let i = 0; i < numLights; i++) {
+          const bulb = document.createElement("img");
+          bulb.src = "https://cdn-icons-png.flaticon.com/512/169/169367.png";
+          bulb.classList.add("light");
+          bulb.style.left = `${i * (100/numLights) + (100/(numLights*2))}%`;
+          document.body.appendChild(bulb);
+        }
+        
+        const hearts = document.querySelectorAll('.heart');
+        hearts.forEach(heart => {
+          heart.style.opacity = '0';
+          setTimeout(() => heart.remove(), 500);
+        });
+
+        this.classList.remove("show");
+        setTimeout(() => document.getElementById("btn3").classList.add("show"), 1500);
+      };
+
+      // BALLOONS BUTTON
+      document.getElementById("btn3").onclick = function() {
+        const colors = ["red", "blue", "green", "yellow"];
+        const numBalloons = window.innerWidth < 480 ? 15 : 25;
+        for (let i = 0; i < numBalloons; i++) {
+          const balloon = document.createElement("img");
+          const color = colors[i % colors.length];
+          balloon.src = `balloon_${color}.png`;
+          balloon.onerror = () => {
+            balloon.src = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><ellipse cx='256' cy='400' rx='96' ry='32' fill='${color}'/><path fill='${color}' d='M256 16c-80 0-144 64-144 144 0 80 144 240 144 240s144-160 144-240c0-80-64-144-144-144z'/></svg>`;
+          };
+          balloon.classList.add("balloon");
+          balloon.style.left = Math.random() * 100 + "vw";
+          balloon.style.top = "100vh";
+          balloon.style.animationDelay = Math.random() * 10 + "s";
+          const balloonSize = window.innerWidth < 480 ? 40 : 50;
+          balloon.style.width = balloonSize + Math.random() * 15 + "px";
+          document.body.appendChild(balloon);
+        }
+        this.classList.remove("show");
+        setTimeout(() => document.getElementById("btn4").classList.add("show"), 1500);
+      };
+
+      document.getElementById("btn4").onclick = function() {
+        document.getElementById("cake").classList.add("show");
+        this.classList.remove("show");
+        setTimeout(() => document.getElementById("btn5").classList.add("show"), 1500);
+      };
+
+      document.getElementById("btn5").onclick = function() {
+        document.getElementById("cake").src = "cake_candles.png";
+        this.classList.remove("show");
+        document.getElementById("popupMsg").classList.add("show");
+        document.getElementById("madamji").classList.add("show");
+        document.getElementById("carouselContainer").classList.add("show");
+        
+        // Play the birthday song
+        const song = document.getElementById("birthdaySong");
+        song.volume = 0.3; // Set volume to 30% to not be too loud
+        song.play().catch(e => console.log("Auto-play prevented:", e));
+        
+        // Add a mute button for the song
+        addMuteButton();
+      };
+      
+      // Handle orientation change for better mobile experience
+      window.addEventListener('orientationchange', function() {
+        setTimeout(function() {
+          window.scrollTo(0, 0);
+        }, 200);
+      });
+      
+      // Function to add mute button
+      function addMuteButton() {
+        const muteBtn = document.createElement('button');
+        muteBtn.innerHTML = '🔊 Mute';
+        muteBtn.style.position = 'fixed';
+        muteBtn.style.bottom = '20px';
+        muteBtn.style.right = '20px';
+        muteBtn.style.zIndex = '100';
+        muteBtn.style.padding = '8px 15px';
+        muteBtn.style.borderRadius = '20px';
+        muteBtn.style.backgroundColor = '#16DB93';
+        muteBtn.style.color = '#0A1128';
+        muteBtn.style.border = 'none';
+        muteBtn.style.cursor = 'pointer';
+        muteBtn.style.boxShadow = '0 0 10px rgba(0,0,0,0.3)';
+        
+        muteBtn.onclick = function() {
+          const song = document.getElementById("birthdaySong");
+          if (song.paused) {
+            song.play();
+            muteBtn.innerHTML = '🔊 Mute';
+          } else {
+            song.pause();
+            muteBtn.innerHTML = '🔇 Unmute';
+          }
+        };
+        
+        document.body.appendChild(muteBtn);
+      }
+    };
+  </script>
+</body>
+</html>
